@@ -1,14 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-
-export interface Pelis {
-  id: number;
-  title: string;
-  original_title: string;
-  image: string;
-  movie_banner: string;
-  description: string;
-}
+import { Pelis } from "../interfaces/pelis";
 
 interface Props {
   peli: Pelis;
@@ -16,8 +8,9 @@ interface Props {
 
 export const PeliCard = ({ peli }: Props) => {
   return (
-    <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
-      <Link href={`/peliculas/${peli.id}`}>
+    <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 transition dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+      {/* Imagen clickeable */}
+      <Link href={`/Ghibli/${peli.id}`}>
         <Image
           src={peli.image}
           alt={peli.title}
@@ -26,15 +19,19 @@ export const PeliCard = ({ peli }: Props) => {
           className="rounded-t-lg w-full h-auto"
         />
       </Link>
+
+      {/* Contenido de la tarjeta */}
       <div className="p-5">
-        <Link href={`/peliculas/${peli.id}`}>
+        <Link href={`/Ghibli/${peli.id}`}>
           <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-            {peli.title}
+            {peli.title} ({peli.original_title})
           </h5>
         </Link>
         <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
           {peli.description.substring(0, 100)}...
         </p>
+
+        {/* Botón "Leer más" */}
         <Link
           href={`/Ghibli/${peli.id}`}
           className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -60,30 +57,3 @@ export const PeliCard = ({ peli }: Props) => {
     </div>
   );
 };
-
-/** 
-export const PeliCard = ({ peli }: Props) => {
-  return (
-    <Link
-      href={`/peliculas/${peli.id}`}
-      className="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow-sm md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
-    >
-      <Image
-        src={peli.image}
-        alt={peli.title}
-        width={192}
-        height={288}
-        className="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg"
-      />
-      <div className="flex flex-col justify-between p-4 leading-normal">
-        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-          {peli.title}
-        </h5>
-        <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-          {peli.description.substring(0, 100)}...
-        </p>
-      </div>
-    </Link>
-  );
-};
-**/
