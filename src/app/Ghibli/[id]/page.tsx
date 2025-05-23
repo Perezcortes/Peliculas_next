@@ -7,19 +7,38 @@ import { Pelis } from "../../interfaces/pelis";
 
 const API_URL = "https://ghibliapi.vercel.app/films";
 
+
+// Solo 3 películas estáticas en el build
 export async function generateStaticParams() {
   const res = await fetch("https://ghibliapi.vercel.app/films");
   if (!res.ok) throw new Error("Error al obtener películas.");
   const pelis = await res.json();
 
   return pelis.slice(0, 5).map((peli: { id: string }) => ({ id: peli.id }));
+
 }
+
+// Obtener una película por su ID
+const getPeliById = async (id: string) => {
+  try {
+    const res = await fetch(`https://ghibliapi.vercel.app/films/${id}`, {
+      next: { revalidate: 60 }, // Generación estática con revalidación (ISR)
+    });
+
+    if (!res.ok) throw new Error('Película no encontrada');
+    return res.json();
+  } catch (error) {
+    console.error(error);
+    notFound();
+  }
+};
 
 interface Props {
     params: {
         id: string;
     };
 }
+
 
 export default function PeliPage({ params }: Props) {
     const [peli, setPeli] = useState<Pelis | null>(null);
@@ -88,4 +107,4 @@ export default function PeliPage({ params }: Props) {
             </div>
         </div>
     );
-}
+
